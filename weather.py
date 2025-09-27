@@ -2,6 +2,11 @@ import ftplib
 import xml.etree.ElementTree as ET
 import io
 
+textblue = "\033[1;38;2;80;80;255m"
+textblue2 = "\033[1;38;2;120;120;255m"
+textlightblue = "\033[1;38;2;160;160;255m"
+textbrightyellow = "\033[1;38;2;255;255;0m"
+
 def get_temperature(period):
     for temp_type in ['air_temperature', 'minimum_temperature', 'maximum_temperature']:
         temp = period.find(f"element[@type='{temp_type}']")
@@ -68,7 +73,8 @@ def ascii_icon(summary):
 def ascii_weather_display(forecasts):
     for precip, temp, summary in forecasts:
         icon = ascii_icon(summary)
-        print(f"{icon} {temp}°C {summary} {precip}")
+        print(icon +" " + textbrightyellow+ temp+"°"+textblue2+summary)
+        print(textlightblue+"  "+precip)
 
 
 forecasts = fetch_bom_forecast()
