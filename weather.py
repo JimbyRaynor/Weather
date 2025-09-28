@@ -1,11 +1,72 @@
 import ftplib
 import xml.etree.ElementTree as ET
 import io
+import requests
 
 textblue = "\033[1;38;2;80;80;255m"
 textblue2 = "\033[1;38;2;120;120;255m"
 textlightblue = "\033[1;38;2;160;160;255m"
 textbrightyellow = "\033[1;38;2;255;255;0m"
+
+import urllib.request
+from html.parser import HTMLParser
+
+class BOMParser(HTMLParser):
+    def __init__(self):
+        super().__init__()
+        self.in_row = False
+        self.in_cell = False
+        self.row_data = []
+        self.melbourne_rows = []
+
+    def handle_starttag(self, tag, attrs):
+        if tag == 'tr':
+            self.in_row = True
+            self.row_data = []
+        elif tag == 'td' and self.in_row:
+            self.in_cell = True
+
+    def handle_endtag(self, tag):
+        if tag == 'tr':
+            self.in_row = False
+            if self.row_data:
+            #    print("🔍 Row:", self.row_data)
+                 self.melbourne_rows.append(self.row_data)
+        elif tag == 'td':
+            self.in_cell = False
+
+    def handle_data(self, data):
+        if self.in_cell:
+            self.row_data.append(data.strip())
+
+def fetch_melbourne_observation():
+    url = "http://www.bom.gov.au/products/IDV60801/IDV60801.95867.shtml"
+    headers = {'User-Agent': 'Mozilla/5.0'}
+    req = urllib.request.Request(url, headers=headers)
+    with urllib.request.urlopen(req) as response:
+        html = response.read().decode()
+
+    parser = BOMParser()
+    parser.feed(html)
+
+    #print(parser.melbourne_rows)
+
+    if parser.melbourne_rows:
+        latest = parser.melbourne_rows[1]  # Get the newest row
+        temp = latest[1]
+        apparent = latest[2]
+        wind = latest[7]
+        humidity = latest[4]
+        time = latest[0]
+        rain = latest[13]
+        print(f"🌡️ Temp: {temp}°C | Feels Like: {apparent}°C")
+        print(f"🌬️ Wind: {wind} km/h | 💧 Humidity: {humidity}% | rain: {rain}mm")
+        print(f"🕒 Observed at: {time}")
+    else:
+        print("⚠️ No Melbourne data found.")
+
+
+
 
 def get_temperature(period):
     for temp_type in ['air_temperature', 'minimum_temperature', 'maximum_temperature']:
@@ -44,11 +105,12 @@ def fetch_bom_forecast():
                   element_type = element.attrib.get("type")
                   element_value = element.text
                   #print(f"  {element_type}: {element_value}")
+                  temp = "XX"
                   if element_type == "air_temperature_maximum":
                       temp = element_value
                   if element_type.find("precip") != -1:
                       precip = element_value
-                if time  and summary is not None:
+                if (time is not None) and (summary is not None):
                     forecasts.append((precip, temp, summary.text))            
             break
     return forecasts
@@ -76,9 +138,11 @@ def ascii_weather_display(forecasts):
         print(icon +" " + textbrightyellow+ temp+"°"+textblue2+summary)
         print(textlightblue+"  "+precip)
 
-
+fetch_melbourne_observation()
 forecasts = fetch_bom_forecast()
 if forecasts:
         ascii_weather_display(forecasts)
 else:
         print("No forecast data found for Melbourne.")
+
+
