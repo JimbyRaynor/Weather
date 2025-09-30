@@ -46,25 +46,25 @@ def timer1():
     forecasts = weather.fetch_bom_forecast()
     (precip, maxtemp, summary) = forecasts[0]
     icon = weather.ascii_icon(summary.lower())
-    canvas1.itemconfigure(day0summary,text=icon+" "+summary+" "+precip+". Max "+maxtemp+"°C")
+    canvas1.itemconfigure(day0summary,text=icon+" "+summary+" "+precip+" rain. Max "+maxtemp+"°C")
     (precip, maxtemp, summary) = forecasts[1]
     icon = weather.ascii_icon(summary.lower())
-    canvas1.itemconfigure(day1summary,text=icon+" "+summary+" "+precip+". Max "+maxtemp+"°C")
+    canvas1.itemconfigure(day1summary,text=icon+" "+summary+" "+precip+" rain. Max "+maxtemp+"°C")
     (precip, maxtemp, summary) = forecasts[2]
     icon = weather.ascii_icon(summary.lower())
-    canvas1.itemconfigure(day2summary,text=icon+" "+summary+" "+precip+". Max "+maxtemp+"°C")
+    canvas1.itemconfigure(day2summary,text=icon+" "+summary+" "+precip+" rain. Max "+maxtemp+"°C")
     (precip, maxtemp, summary) = forecasts[3]
     icon = weather.ascii_icon(summary.lower())
-    canvas1.itemconfigure(day3summary,text=icon+" "+summary+" "+precip+". Max "+maxtemp+"°C")
+    canvas1.itemconfigure(day3summary,text=icon+" "+summary+" "+precip+" rain. Max "+maxtemp+"°C")
     (precip, maxtemp, summary) = forecasts[4]
     icon = weather.ascii_icon(summary.lower())
-    canvas1.itemconfigure(day4summary,text=icon+" "+summary+" "+precip+". Max "+maxtemp+"°C")
+    canvas1.itemconfigure(day4summary,text=icon+" "+summary+" "+precip+" rain. Max "+maxtemp+"°C")
     (precip, maxtemp, summary) = forecasts[5]
     icon = weather.ascii_icon(summary.lower())
-    canvas1.itemconfigure(day5summary,text=icon+" "+summary+" "+precip+". Max "+maxtemp+"°C")
+    canvas1.itemconfigure(day5summary,text=icon+" "+summary+" "+precip+" rain. Max "+maxtemp+"°C")
     (precip, maxtemp, summary) = forecasts[6]
     icon = weather.ascii_icon(summary.lower())
-    canvas1.itemconfigure(day6summary,text=icon+" "+summary+" "+precip+". Max "+maxtemp+"°C")
+    canvas1.itemconfigure(day6summary,text=icon+" "+summary+" "+precip+" rain. Max "+maxtemp+"°C")
     mainwin.after(60000,timer1)
 
 
