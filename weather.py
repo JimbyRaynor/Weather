@@ -1,7 +1,7 @@
 import ftplib
 import xml.etree.ElementTree as ET
 import io
-import requests
+#import requests
 
 textblue = "\033[1;38;2;80;80;255m"
 textblue2 = "\033[1;38;2;120;120;255m"
@@ -64,6 +64,7 @@ def fetch_melbourne_observation():
         print(f"🕒 Observed at: {time}")
     else:
         print("⚠️ No Melbourne data found.")
+    return (temp,apparent, wind, humidity, rain,time)
 
 
 
@@ -117,20 +118,22 @@ def fetch_bom_forecast():
 
 def ascii_icon(summary):
     summary = summary.lower()
+    icon = "🌈"
     if "sun" in summary:
-        return "☀️"
-    elif "cloud" in summary:
-        return "☁️"
-    elif "rain" in summary or "shower" in summary:
-        return "🌧️"
-    elif "storm" in summary:
-        return "⛈️"
-    elif "fog" in summary:
-        return "🌫️"
-    elif "snow" in summary:
-        return "❄️"
-    else:
-        return "🌈"
+        icon = "☀️"
+    if "cloudy" in  summary:
+        icon = "☁️"
+    if "partly cloudy" in  summary:
+        icon = "☀️☁️"
+    if "rain" in summary or "shower" in summary:
+        icon = "🌧️"
+    if "storm" in summary:
+        icon = "⛈️"
+    if "fog" in summary:
+        icon = "🌫️"
+    if "snow" in summary:
+        icon = "❄️"
+    return icon
 
 def ascii_weather_display(forecasts):
     for precip, temp, summary in forecasts:
@@ -138,7 +141,6 @@ def ascii_weather_display(forecasts):
         print(icon +" " + textbrightyellow+ temp+"°"+textblue2+summary)
         print(textlightblue+"  "+precip)
 
-fetch_melbourne_observation()
 forecasts = fetch_bom_forecast()
 if forecasts:
         ascii_weather_display(forecasts)
