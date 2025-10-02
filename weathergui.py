@@ -5,9 +5,6 @@ import os
 
 import sys
 
-sys.path.insert(0, "/home/deck/Documents") # needed to load LEDlib
-import LEDlib
-
 # for loading files (.png, .txt), set current directory = location of this python script (needed for Linux)
 current_script_directory = os.path.dirname(os.path.abspath(__file__))
 os.chdir(current_script_directory)
@@ -17,20 +14,24 @@ class GameObject:
     def __init__(self,file1="",file2="",file3="",x=0,y=0):
         self.x = x
         self.y = y
-        self.image = PhotoImage(file=file1).zoom(1,1)
+        self.image = PhotoImage(file=file1)
         self.sprite = canvas1.create_image(2,2,image=self.image)
         if file2 != "":
-           self.image2 = PhotoImage(file=file2).zoom(2,2)
+           self.image2 = PhotoImage(file=file2)
         if file3 != "":
-           self.image3 = PhotoImage(file=file3).zoom(2,2)
+           self.image3 = PhotoImage(file=file3)
         canvas1.move(self.sprite,x,y)
     def move(self,dx=0,dy=0):
         self.x = self.x + dx
         self.y = self.y + dy
         canvas1.move(self.sprite,dx,dy)     
-    def facedirection(self):
-         canvas1.itemconfigure(self.sprite,image=self.image2)
-         canvas1.itemconfigure(self.sprite,image=self.image3)
+    def changeimage(self,imagenum):
+         if imagenum == 0:
+           canvas1.itemconfigure(self.sprite,image=self.image)
+         if imagenum == 1:
+           canvas1.itemconfigure(self.sprite,image=self.image2)
+         if imagenum == 2:
+           canvas1.itemconfigure(self.sprite,image=self.image3)
 
 
 mainwin = Tk()
@@ -39,8 +40,14 @@ canvas1 = Canvas(mainwin,width=1600,height= 900,bg="black")
 canvas1.place(x=0,y=0)
 
 
-spritecloud3 = GameObject("Showers.png",x=500,y=30)
-
+#spritecloud3 = GameObject("Showers.png",x=500,y=30)
+spriteForcast0 = GameObject("sun.png","Showers.png",x=500,y=30)
+spriteForcast1 = GameObject("sunsmall.png","Showerssmall.png",x=350,y=195)
+spriteForcast2 = GameObject("sunsmall.png","Showerssmall.png",x=350,y=295)
+spriteForcast3 = GameObject("sunsmall.png","Showerssmall.png",x=350,y=395)
+spriteForcast4 = GameObject("sunsmall.png","Showerssmall.png",x=350,y=495)
+spriteForcast5 = GameObject("sunsmall.png","Showerssmall.png",x=350,y=595)
+spriteForcast6 = GameObject("sunsmall.png","Showerssmall.png",x=350,y=695)
 
 fontbig = ("Arial",70)
 fontmedium = ("Arial",45)
@@ -51,12 +58,12 @@ mytemptext = canvas1.create_text(300,40,font=fontbig,text="temp",fill="yellow")
 myraintext = canvas1.create_text(800,110,font=fontsmall,text="rain summary",fill="#4343D3")
 myupdatedtext = canvas1.create_text(1400,850,font=fonttiny2,text="updated",fill="yellow")
 day0summary = canvas1.create_text(1000,50,font=fontsmall,text="summary",fill="#6B6BEE")
-day1summary = canvas1.create_text(340,200,font=fontsmall,text="summary1",anchor="w",fill="#7373DD")
-day2summary = canvas1.create_text(340,300,font=fontsmall,text="summary2",anchor="w",fill="#7373DD")
-day3summary = canvas1.create_text(340,400,font=fontsmall,text="summary3",anchor="w",fill="#7373DD")
-day4summary = canvas1.create_text(340,500,font=fontsmall,text="summary4",anchor="w",fill="#7373DD")
-day5summary = canvas1.create_text(340,600,font=fontsmall,text="summary4",anchor="w",fill="#7373DD")
-day6summary = canvas1.create_text(340,700,font=fontsmall,text="summary4",anchor="w",fill="#7373DD")
+day1summary = canvas1.create_text(390,200,font=fontsmall,text="summary1",anchor="w",fill="#7373DD")
+day2summary = canvas1.create_text(390,300,font=fontsmall,text="summary2",anchor="w",fill="#7373DD")
+day3summary = canvas1.create_text(390,400,font=fontsmall,text="summary3",anchor="w",fill="#7373DD")
+day4summary = canvas1.create_text(390,500,font=fontsmall,text="summary4",anchor="w",fill="#7373DD")
+day5summary = canvas1.create_text(390,600,font=fontsmall,text="summary4",anchor="w",fill="#7373DD")
+day6summary = canvas1.create_text(390,700,font=fontsmall,text="summary4",anchor="w",fill="#7373DD")
 
 daynames = [0]
 for i in range(1,7):
@@ -82,26 +89,33 @@ def timer1():
     canvas1.itemconfigure(myupdatedtext,text=f"🕒 Updated: {time}")
     
     (precip, maxtemp, mintemp,summary) = forecasts[0]
+    if "shower" in summary.lower(): spriteForcast0.changeimage(1)
     #icon = weather.ascii_icon(summary.lower())
     canvas1.itemconfigure(day0summary,text=summary+" "+precip+" rain. Max "+maxtemp+"°C"+". Min "+mintemp+"°C")
     (precip, maxtemp,mintemp, summary) = forecasts[1]
+    if "shower" in summary.lower(): spriteForcast1.changeimage(1)
     icon = weather.ascii_icon(summary.lower())
-    canvas1.itemconfigure(day1summary,text=icon+" "+summary+" "+precip+" rain. Min "+mintemp+"°C")
+    canvas1.itemconfigure(day1summary,text=summary+" "+precip+" rain. Min "+mintemp+"°C")
     (precip, maxtemp, mintemp, summary) = forecasts[2]
+    if "shower" in summary.lower(): spriteForcast2.changeimage(1)
     icon = weather.ascii_icon(summary.lower())
-    canvas1.itemconfigure(day2summary,text=icon+" "+summary+" "+precip+" rain. Min "+mintemp+"°C")
+    canvas1.itemconfigure(day2summary,text=summary+" "+precip+" rain. Min "+mintemp+"°C")
     (precip, maxtemp, mintemp, summary) = forecasts[3]
+    if "shower" in summary.lower(): spriteForcast3.changeimage(1)
     icon = weather.ascii_icon(summary.lower())
-    canvas1.itemconfigure(day3summary,text=icon+" "+summary+" "+precip+" rain. Min "+mintemp+"°C")
+    canvas1.itemconfigure(day3summary,text=summary+" "+precip+" rain. Min "+mintemp+"°C")
     (precip, maxtemp, mintemp, summary) = forecasts[4]
+    if "shower" in summary.lower(): spriteForcast4.changeimage(1)
     icon = weather.ascii_icon(summary.lower())
-    canvas1.itemconfigure(day4summary,text=icon+" "+summary+" "+precip+" rain. Min "+mintemp+"°C")
+    canvas1.itemconfigure(day4summary,text=summary+" "+precip+" rain. Min "+mintemp+"°C")
     (precip, maxtemp, mintemp, summary) = forecasts[5]
+    if "shower" in summary.lower(): spriteForcast5.changeimage(1)
     icon = weather.ascii_icon(summary.lower())
-    canvas1.itemconfigure(day5summary,text=icon+" "+summary+" "+precip+" rain. Min "+mintemp+"°C")
+    canvas1.itemconfigure(day5summary,text=summary+" "+precip+" rain. Min "+mintemp+"°C")
     (precip, maxtemp, mintemp, summary) = forecasts[6]
+    if "shower" in summary.lower(): spriteForcast6.changeimage(1)
     icon = weather.ascii_icon(summary.lower())
-    canvas1.itemconfigure(day6summary,text=icon+" "+summary+" "+precip+" rain. Min "+mintemp+"°C")
+    canvas1.itemconfigure(day6summary,text=summary+" "+precip+" rain. Min "+mintemp+"°C")
     mainwin.after(60000,timer1)
 
 
