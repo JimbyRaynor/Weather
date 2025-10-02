@@ -95,26 +95,27 @@ def fetch_bom_forecast():
 
     # Extract 3-hourly forecast for Melbourne
     forecasts = []
-    precip = "0mm"
-    temp = "XX"
     for area in root.iter("area"):
         if "Melbourne" in area.attrib.get("description", ""):   
             for period in area.findall("forecast-period"):
-                precip = "0mm"
-                temp = "XX"
                 time = period.attrib.get("start-time-local")
                 day = time[5:10]
                 summary = period.find("text[@type='precis']")
-                for element in period.findall("element"):
+                precip = "0mm"
+                tempmax = "XX"
+                tempmin = "XX"
+                for element in period.findall("element"): 
                   element_type = element.attrib.get("type")
                   element_value = element.text
                   #print(f"  {element_type}: {element_value}") 
                   if element_type == "air_temperature_maximum":
-                      temp = element_value
+                      tempmax = element_value
+                  if element_type == "air_temperature_minimum":
+                      tempmin = element_value
                   if element_type.find("precip") != -1:
                       precip = element_value
                 if (time is not None) and (summary is not None):
-                    forecasts.append((precip, temp, summary.text))            
+                    forecasts.append((precip, tempmax, tempmin, summary.text))            
             break
     return forecasts
 
@@ -138,9 +139,9 @@ def ascii_icon(summary):
     return icon
 
 def ascii_weather_display(forecasts):
-    for precip, temp, summary in forecasts:
+    for precip, tempmax, tempmin, summary in forecasts:
         icon = ascii_icon(summary)
-        print(icon +" " + textbrightyellow+ temp+"°"+textblue2+summary)
+        print(icon +" " + textbrightyellow+ tempmax+"° ("+tempmin+"°) "+textblue2+summary)
         print(textlightblue+"  "+precip)
 
 forecasts = fetch_bom_forecast()
