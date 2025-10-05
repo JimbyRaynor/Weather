@@ -83,8 +83,9 @@ daylist = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday
 def chooseicon(myspriteobject, textinfo):
      myspriteobject.changeimage(0) # default to sun
      if "shower" in  textinfo or "rain" in  textinfo: myspriteobject.changeimage(1)
-     if "partly cloudy" in  textinfo: myspriteobject.changeimage(2)
      if "cloudy" in  textinfo: myspriteobject.changeimage(3)
+     if "partly cloudy" in  textinfo: myspriteobject.changeimage(2)
+     
 
 def timer1():
     t = localtime()
