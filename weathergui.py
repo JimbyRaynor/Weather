@@ -11,7 +11,7 @@ os.chdir(current_script_directory)
 
 
 class GameObject:
-    def __init__(self,file1="",file2="",file3="",x=0,y=0):
+    def __init__(self,file1="",file2="",file3="",file4="",x=0,y=0):
         self.x = x
         self.y = y
         self.image = PhotoImage(file=file1)
@@ -20,6 +20,8 @@ class GameObject:
            self.image2 = PhotoImage(file=file2)
         if file3 != "":
            self.image3 = PhotoImage(file=file3)
+        if file4 != "":
+           self.image4 = PhotoImage(file=file4)
         canvas1.move(self.sprite,x,y)
     def move(self,dx=0,dy=0):
         self.x = self.x + dx
@@ -28,10 +30,13 @@ class GameObject:
     def changeimage(self,imagenum):
          if imagenum == 0:
            canvas1.itemconfigure(self.sprite,image=self.image)
-         if imagenum == 1:
+         elif imagenum == 1:
            canvas1.itemconfigure(self.sprite,image=self.image2)
-         if imagenum == 2:
+         elif imagenum == 2:
            canvas1.itemconfigure(self.sprite,image=self.image3)
+         elif imagenum == 3:
+           canvas1.itemconfigure(self.sprite,image=self.image4)
+         else: print("Error: add to change image")
 
 
 mainwin = Tk()
@@ -41,13 +46,13 @@ canvas1.place(x=0,y=0)
 
 
 #spritecloud3 = GameObject("Showers.png",x=500,y=30)
-spriteForcast0 = GameObject("sun.png","Showers.png","PartlyCloudy.png",x=500,y=30)
-spriteForcast1 = GameObject("sunsmall.png","Showerssmall.png","PartlyCloudysmall.png",x=350,y=195)
-spriteForcast2 = GameObject("sunsmall.png","Showerssmall.png","PartlyCloudysmall.png",x=350,y=295)
-spriteForcast3 = GameObject("sunsmall.png","Showerssmall.png","PartlyCloudysmall.png",x=350,y=395)
-spriteForcast4 = GameObject("sunsmall.png","Showerssmall.png","PartlyCloudysmall.png",x=350,y=495)
-spriteForcast5 = GameObject("sunsmall.png","Showerssmall.png","PartlyCloudysmall.png",x=350,y=595)
-spriteForcast6 = GameObject("sunsmall.png","Showerssmall.png","PartlyCloudysmall.png",x=350,y=695)
+spriteForcast0 = GameObject("sun.png","Showers.png","PartlyCloudy.png","Cloudy.png",x=500,y=30)
+spriteForcast1 = GameObject("sunsmall.png","Showerssmall.png","PartlyCloudysmall.png","Cloudysmall.png",x=350,y=195)
+spriteForcast2 = GameObject("sunsmall.png","Showerssmall.png","PartlyCloudysmall.png","Cloudysmall.png",x=350,y=295)
+spriteForcast3 = GameObject("sunsmall.png","Showerssmall.png","PartlyCloudysmall.png","Cloudysmall.png",x=350,y=395)
+spriteForcast4 = GameObject("sunsmall.png","Showerssmall.png","PartlyCloudysmall.png","Cloudysmall.png",x=350,y=495)
+spriteForcast5 = GameObject("sunsmall.png","Showerssmall.png","PartlyCloudysmall.png","Cloudysmall.png",x=350,y=595)
+spriteForcast6 = GameObject("sunsmall.png","Showerssmall.png","PartlyCloudysmall.png","Cloudysmall.png",x=350,y=695)
 
 fontbig = ("Arial",70)
 fontmedium = ("Arial",45)
@@ -77,8 +82,9 @@ daylist = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday
 
 def chooseicon(myspriteobject, textinfo):
      myspriteobject.changeimage(0) # default to sun
-     if "shower" in  textinfo: myspriteobject.changeimage(1)
+     if "shower" in  textinfo or "rain" in  textinfo: myspriteobject.changeimage(1)
      if "partly cloudy" in  textinfo: myspriteobject.changeimage(2)
+     if "cloudy" in  textinfo: myspriteobject.changeimage(3)
 
 def timer1():
     t = localtime()
