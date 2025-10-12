@@ -95,8 +95,10 @@ def timer1():
     
     (precip, maxtemp, mintemp,summary) = forecasts[0]
     chooseicon(spriteForcast0, summary.lower())
-    canvas1.itemconfigure(day0summary,text=summary+" "+precip+" rain. Max "+maxtemp+"°C"+". Min "+mintemp+"°C")
-    
+    if precip != "0mm":
+      canvas1.itemconfigure(day0summary,text=summary+" "+precip+" rain. Max "+maxtemp+"°C"+". Min "+mintemp+"°C")
+    else:
+      canvas1.itemconfigure(day0summary,text=summary+" Max "+maxtemp+"°C"+". Min "+mintemp+"°C")
     (precip, maxtemp,mintemp, summary) = forecasts[1]
     chooseicon(spriteForcast1, summary.lower())
     canvas1.itemconfigure(day1summary,text=summary+" "+precip+" rain. Min "+mintemp+"°C")

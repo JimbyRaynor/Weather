@@ -43,8 +43,12 @@ def fetch_melbourne_observation():
     url = "http://www.bom.gov.au/products/IDV60801/IDV60801.95867.shtml"
     headers = {'User-Agent': 'Mozilla/5.0'}
     req = urllib.request.Request(url, headers=headers)
-    with urllib.request.urlopen(req) as response:
-        html = response.read().decode()
+    try:
+        with urllib.request.urlopen(req) as response:
+           html = response.read().decode()
+    except Exception as e:
+        print("Error: ",e,". Will try again in 1 min.")
+        return (0,0,0,0,0,0)
 
     parser = BOMParser()
     parser.feed(html)
@@ -67,6 +71,29 @@ def fetch_melbourne_observation():
     return (temp,apparent, wind, humidity, rain,time)
 
 
+def fetchALL_melbourne_observation():
+    url = "http://www.bom.gov.au/products/IDV60801/IDV60801.95867.shtml"
+    headers = {'User-Agent': 'Mozilla/5.0'}
+    req = urllib.request.Request(url, headers=headers)
+    try: 
+       with urllib.request.urlopen(req) as response:
+          html = response.read().decode()
+    except Exception as e:
+        print("Error: ",e,". Will try again in 1 min.")
+        return []
+
+    parser = BOMParser()
+    parser.feed(html)
+    return parser.melbourne_rows
+
+
+rows = fetchALL_melbourne_observation()
+i = 0
+for row in rows:
+   if i >= 1 and i <= 20 and row[0] != '':
+      print(i,":",row[0],":",row[1])
+   i = i + 1
+
 
 
 def get_temperature(period):
@@ -82,16 +109,20 @@ def fetch_bom_forecast():
     ftp_path = "/anon/gen/fwo/IDV10753.xml"  # Victoria forecast feed
 
     # Connect to FTP and retrieve file
-    ftp = ftplib.FTP(ftp_host)
-    ftp.login()
-    buffer = io.BytesIO()
-    ftp.retrbinary(f"RETR {ftp_path}", buffer.write)
-    ftp.quit()
+    try:
+       ftp = ftplib.FTP(ftp_host)
+       ftp.login()
+       buffer = io.BytesIO()
+       ftp.retrbinary(f"RETR {ftp_path}", buffer.write)
+       ftp.quit()
 
-    # Parse XML from buffer
-    buffer.seek(0)
-    tree = ET.parse(buffer)
-    root = tree.getroot()
+       # Parse XML from buffer
+       buffer.seek(0)
+       tree = ET.parse(buffer)
+       root = tree.getroot()
+    except Exception as e:
+       print("Error: ",e,". Will try again in 1 min.") 
+       return []
 
     # Extract 3-hourly forecast for Melbourne
     forecasts = []
