@@ -84,11 +84,18 @@ def timer1():
     t = localtime()
     daynumber = t.tm_wday
     forecasts = weather.fetch_bom_forecast()
+    if forecasts == None:
+      mainwin.after(60000,timer1)
+      return
     for i in range(1,7):
-       canvas1.itemconfigure(daynames[i],text= daylist[daynumber+i])
+     canvas1.itemconfigure(daynames[i],text= daylist[daynumber+i])
     for i in range(1,7):
-       canvas1.itemconfigure(maxtemps[i],text= forecasts[i][1]+"°C")
-    (temp, apparent,wind, humidity, rain,time) = weather.fetch_melbourne_observation()
+      canvas1.itemconfigure(maxtemps[i],text= forecasts[i][1]+"°C")
+    weatherobserve = weather.fetch_melbourne_observation()
+    if weatherobserve == None:
+       mainwin.after(60000,timer1)
+       return
+    (temp, apparent,wind, humidity, rain,time) = weatherobserve
     canvas1.itemconfigure(mytemptext,text= temp+"°")
     canvas1.itemconfigure(myraintext,text=f"Feels like: {apparent}°C | 🌬️ Wind: {wind} km/h | 💧 Humidity: {humidity}% | 💧 rain: {rain}mm")
     canvas1.itemconfigure(myupdatedtext,text=f"🕒 Updated: {time}")

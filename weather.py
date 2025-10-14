@@ -48,7 +48,7 @@ def fetch_melbourne_observation():
            html = response.read().decode()
     except Exception as e:
         print("Error: ",e,". Will try again in 1 min.")
-        return (0,0,0,0,0,0)
+        return None
 
     parser = BOMParser()
     parser.feed(html)
@@ -80,7 +80,7 @@ def fetchALL_melbourne_observation():
           html = response.read().decode()
     except Exception as e:
         print("Error: ",e,". Will try again in 1 min.")
-        return []
+        return None
 
     parser = BOMParser()
     parser.feed(html)
@@ -122,7 +122,7 @@ def fetch_bom_forecast():
        root = tree.getroot()
     except Exception as e:
        print("Error: ",e,". Will try again in 1 min.") 
-       return []
+       return None
 
     # Extract 3-hourly forecast for Melbourne
     forecasts = []
