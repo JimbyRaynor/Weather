@@ -107,9 +107,9 @@ def drawgraph():
   x_coords = [padding + i * x_spacing for i in range(len(rows))]
 
   for i, time in enumerate(times):
-    listtime.append(canvas1.create_text(1900-x_coords[i], 800+temp_y[i]/2, text=time, angle=90, anchor="nw",fill="white" ,font=("Arial", 10)))
-    listtemp.append(canvas1.create_text(1910-x_coords[i], 810+temp_y[i]/2, text=str(temps[i])+"°C",fill="yellow" ,font=("Arial", 10)))
-    listwind.append(canvas1.create_text(1930-x_coords[i], 775+temp_y[i]/2, text=winds[i],fill="white" ,font=("Arial", 10)))
+    listtime.append(canvas1.create_text(1900-x_coords[i], 815+temp_y[i]/2, text=time, angle=90, anchor="nw",fill="white" ,font=("Arial", 10)))
+    listtemp.append(canvas1.create_text(1910-x_coords[i], 825+temp_y[i]/2, text=str(temps[i])+"°C",fill="yellow" ,font=("Arial", 10)))
+    listwind.append(canvas1.create_text(1935-x_coords[i], 775+temp_y[i]/2, text=winds[i],fill="white" ,font=("Arial", 10)))
     
 def updategraph():
   canvas_width = 1900
@@ -132,8 +132,11 @@ def updategraph():
 
   for i, time in enumerate(times):
     canvas1.itemconfigure(listtime[i],text= time)
+    canvas1.coords(listtime[i],1900-x_coords[i], 815+temp_y[i]/2)
     canvas1.itemconfigure(listtemp[i],text= temps[i])
+    canvas1.coords(listtemp[i],1910-x_coords[i], 825+temp_y[i]/2)
     canvas1.itemconfigure(listwind[i],text= winds[i])
+    canvas1.coords(listwind[i],1935-x_coords[i], 775+temp_y[i]/2)
 
 
 def timer1():
