@@ -91,7 +91,7 @@ rows = fetchALL_melbourne_observation()
 i = 0
 for row in rows:
    if i >= 1 and i <= 20 and row[0] != '':
-      print(i,":",row[0],":",row[1])
+      print(i,":",row[0],":",row[1],":",row[6])
    i = i + 1
 
 

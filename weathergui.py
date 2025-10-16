@@ -52,7 +52,6 @@ fonttiny = ("Courier",11)
 fonttiny2 = ("Arial",18)
 mytemptext = canvas1.create_text(300,40+dy,font=fontbig,text="temp",fill="yellow")
 myraintext = canvas1.create_text(800,120+dy,font=fontsmall,text="rain summary",fill="#4343D3")
-myupdatedtext = canvas1.create_text(1400,850,font=fonttiny2,text="updated",fill="yellow")
 day0summary = canvas1.create_text(600,50+dy,font=fontsmall,text="summary",anchor="w",fill="#6B6BEE")
 day1summary = canvas1.create_text(390,200+dy,font=fontsmall,text="summary1",anchor="w",fill="#7373DD")
 day2summary = canvas1.create_text(390,300+dy,font=fontsmall,text="summary2",anchor="w",fill="#7373DD")
@@ -98,7 +97,7 @@ def timer1():
     (temp, apparent,wind, humidity, rain,time) = weatherobserve
     canvas1.itemconfigure(mytemptext,text= temp+"°")
     canvas1.itemconfigure(myraintext,text=f"Feels like: {apparent}°C | 🌬️ Wind: {wind} km/h | 💧 Humidity: {humidity}% | 💧 rain: {rain}mm")
-    canvas1.itemconfigure(myupdatedtext,text=f"🕒 Updated: {time}")
+   
     
     (precip, maxtemp, mintemp,summary) = forecasts[0]
     chooseicon(spriteForcast0, summary.lower())
@@ -134,5 +133,34 @@ def timer1():
 
 timer1()
 
+def normalize(values, height, padding):
+    min_val = min(values)
+    max_val = max(values)
+    scale = (height - 2 * padding) / (max_val - min_val)
+    return [(height - padding - (v - min_val) * scale) for v in values]
 
+def drawgraph():
+  canvas_width = 1900
+  canvas_height = 400
+  padding = 40
+  rowobs = weather.fetchALL_melbourne_observation()
+  if rowobs == None: return
+  rows = []
+  i = 0
+  for row in rowobs:
+   if i >= 1 and i <= 30 and row[0] != '':
+      rows.append((row[0],row[1],row[6]))
+   i = i + 1
+  times = [row[0] for row in rows]
+  temps = [float(row[1]) for row in rows]
+  winds = [row[2] for row in rows]
+  temp_y = normalize(temps, canvas_height, padding)
+  x_spacing = (canvas_width - 2 * padding) / (len(rows) - 1)
+  x_coords = [padding + i * x_spacing for i in range(len(rows))]
+
+  for i, time in enumerate(times):
+    canvas1.create_text(1900-x_coords[i], 800+temp_y[i]/2, text=time, angle=90, anchor="nw",fill="white" ,font=("Arial", 10))
+    canvas1.create_text(1910-x_coords[i], 810+temp_y[i]/2, text=str(temps[i])+"°C",fill="yellow" ,font=("Arial", 10))
+    canvas1.create_text(1930-x_coords[i], 775+temp_y[i]/2, text=winds[i],fill="white" ,font=("Arial", 10))
+drawgraph()
 mainwin.mainloop() 
