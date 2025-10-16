@@ -77,7 +77,36 @@ def chooseicon(myspriteobject, textinfo):
      if "partly cloudy" in  textinfo: myspriteobject.changeimage(2)
      if "rain" in  textinfo: myspriteobject.changeimage(4)
      
-     
+def normalize(values, height, padding):
+    min_val = min(values)
+    max_val = max(values)
+    scale = (height - 2 * padding) / (max_val - min_val)
+    return [(height - padding - (v - min_val) * scale) for v in values]
+
+def drawgraph():
+  canvas_width = 1900
+  canvas_height = 400
+  padding = 40
+  rowobs = weather.fetchALL_melbourne_observation()
+  if rowobs == None: return
+  rows = []
+  i = 0
+  for row in rowobs:
+   if i >= 1 and i <= 30 and row[0] != '':
+      rows.append((row[0],row[1],row[6]))
+   i = i + 1
+  times = [row[0] for row in rows]
+  temps = [float(row[1]) for row in rows]
+  winds = [row[2] for row in rows]
+  temp_y = normalize(temps, canvas_height, padding)
+  x_spacing = (canvas_width - 2 * padding) / (len(rows) - 1)
+  x_coords = [padding + i * x_spacing for i in range(len(rows))]
+
+  for i, time in enumerate(times):
+    canvas1.create_text(1900-x_coords[i], 800+temp_y[i]/2, text=time, angle=90, anchor="nw",fill="white" ,font=("Arial", 10))
+    canvas1.create_text(1910-x_coords[i], 810+temp_y[i]/2, text=str(temps[i])+"°C",fill="yellow" ,font=("Arial", 10))
+    canvas1.create_text(1930-x_coords[i], 775+temp_y[i]/2, text=winds[i],fill="white" ,font=("Arial", 10))
+    
 
 def timer1():
     t = localtime()
@@ -128,39 +157,12 @@ def timer1():
     (precip, maxtemp, mintemp, summary) = forecasts[6]
     chooseicon(spriteForcast6, summary.lower())
     canvas1.itemconfigure(day6summary,text=summary+" "+precip+" rain. Min "+mintemp+"°C")
+    
+    drawgraph()
     mainwin.after(60000,timer1)
 
 
 timer1()
 
-def normalize(values, height, padding):
-    min_val = min(values)
-    max_val = max(values)
-    scale = (height - 2 * padding) / (max_val - min_val)
-    return [(height - padding - (v - min_val) * scale) for v in values]
 
-def drawgraph():
-  canvas_width = 1900
-  canvas_height = 400
-  padding = 40
-  rowobs = weather.fetchALL_melbourne_observation()
-  if rowobs == None: return
-  rows = []
-  i = 0
-  for row in rowobs:
-   if i >= 1 and i <= 30 and row[0] != '':
-      rows.append((row[0],row[1],row[6]))
-   i = i + 1
-  times = [row[0] for row in rows]
-  temps = [float(row[1]) for row in rows]
-  winds = [row[2] for row in rows]
-  temp_y = normalize(temps, canvas_height, padding)
-  x_spacing = (canvas_width - 2 * padding) / (len(rows) - 1)
-  x_coords = [padding + i * x_spacing for i in range(len(rows))]
-
-  for i, time in enumerate(times):
-    canvas1.create_text(1900-x_coords[i], 800+temp_y[i]/2, text=time, angle=90, anchor="nw",fill="white" ,font=("Arial", 10))
-    canvas1.create_text(1910-x_coords[i], 810+temp_y[i]/2, text=str(temps[i])+"°C",fill="yellow" ,font=("Arial", 10))
-    canvas1.create_text(1930-x_coords[i], 775+temp_y[i]/2, text=winds[i],fill="white" ,font=("Arial", 10))
-drawgraph()
 mainwin.mainloop() 
