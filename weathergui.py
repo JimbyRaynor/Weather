@@ -96,8 +96,11 @@ def drawgraph():
   rows = []
   i = 0
   for row in rowobs:
-   if i >= 1 and i <= 30 and row[0] != '':
-      rows.append((row[0],row[1],row[6]))
+   if i >= 1 and i <= 100 and row[0] != '':
+      if i <= 30:
+        rows.append((row[0],row[1],row[6]))
+      elif i% 2 == 0:
+        rows.append((row[0],row[1],row[6]))
    i = i + 1
   times = [row[0] for row in rows]
   temps = [float(row[1]) for row in rows]
@@ -107,9 +110,11 @@ def drawgraph():
   x_coords = [padding + i * x_spacing for i in range(len(rows))]
 
   for i, time in enumerate(times):
-    listtime.append(canvas1.create_text(1900-x_coords[i], 815+temp_y[i]/2, text=time, angle=90, anchor="nw",fill="white" ,font=("Arial", 10)))
-    listtemp.append(canvas1.create_text(1910-x_coords[i], 825+temp_y[i]/2, text=str(temps[i])+"°C",fill="yellow" ,font=("Arial", 10)))
-    listwind.append(canvas1.create_text(1935-x_coords[i], 775+temp_y[i]/2, text=winds[i],fill="white" ,font=("Arial", 10)))
+    listtime.append(canvas1.create_text(1900-x_coords[i], 815+temp_y[i]/2, text=time, angle=90, anchor="nw",fill="blue" ,font=("Arial", 10)))
+    tempcolour = "yellow"
+    if i % 2 == 0: tempcolour = "white"
+    listtemp.append(canvas1.create_text(1910-x_coords[i], 825+temp_y[i]/2, text=str(temps[i])+"°C",fill=tempcolour ,font=("Arial", 10)))
+    listwind.append(canvas1.create_text(1910-x_coords[i], 835+temp_y[i]/2, text=winds[i],fill="light blue" ,font=("Arial", 6)))
     
 def updategraph():
   canvas_width = 1900
@@ -120,8 +125,11 @@ def updategraph():
   rows = []
   i = 0
   for row in rowobs:
-   if i >= 1 and i <= 30 and row[0] != '':
-      rows.append((row[0],row[1],row[6]))
+   if i >= 1 and i <= 100 and row[0] != '':
+      if i <= 30:
+        rows.append((row[0],row[1],row[6]))
+      elif i% 2 == 0:
+        rows.append((row[0],row[1],row[6]))
    i = i + 1
   times = [row[0] for row in rows]
   temps = [float(row[1]) for row in rows]
@@ -136,7 +144,7 @@ def updategraph():
     canvas1.itemconfigure(listtemp[i],text= temps[i])
     canvas1.coords(listtemp[i],1910-x_coords[i], 825+temp_y[i]/2)
     canvas1.itemconfigure(listwind[i],text= winds[i])
-    canvas1.coords(listwind[i],1935-x_coords[i], 775+temp_y[i]/2)
+    canvas1.coords(listwind[i],1910-x_coords[i], 838+temp_y[i]/2)
 
 
 def timer1():
