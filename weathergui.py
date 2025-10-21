@@ -131,6 +131,7 @@ def updategraph():
       elif i% 2 == 0:
         rows.append((row[0],row[1],row[6]))
    i = i + 1
+  print("Number of temperature observations = ",len(rows)) 
   times = [row[0] for row in rows]
   temps = [float(row[1]) for row in rows]
   winds = [row[2] for row in rows]
