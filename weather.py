@@ -87,14 +87,6 @@ def fetchALL_melbourne_observation():
     return parser.melbourne_rows
 
 
-rows = fetchALL_melbourne_observation()
-i = 0
-for row in rows:
-   if i >= 1 and i <= 20 and row[0] != '':
-      print(i,":",row[0],":",row[1],":",row[6])
-   i = i + 1
-
-
 
 def get_temperature(period):
     for temp_type in ['air_temperature', 'minimum_temperature', 'maximum_temperature']:
