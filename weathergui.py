@@ -86,8 +86,10 @@ def normalize(values, height, padding):
 listtemp = []
 listtime = []
 listwind = []
+maxObsN = 60 # max number of observations  ... updated in drawgraph
 
 def drawgraph():
+  global maxObsN
   canvas_width = 1900
   canvas_height = 400
   padding = 40
@@ -102,6 +104,7 @@ def drawgraph():
       elif i% 2 == 0:
         rows.append((row[0],row[1],row[6]))
    i = i + 1
+  maxObsN = len(rows) 
   times = [row[0] for row in rows]
   temps = [float(row[1]) for row in rows]
   winds = [row[2] for row in rows]
@@ -140,12 +143,13 @@ def updategraph():
   x_coords = [padding + i * x_spacing for i in range(len(rows))]
 
   for i, time in enumerate(times):
-    canvas1.itemconfigure(listtime[i],text= time)
-    canvas1.coords(listtime[i],1900-x_coords[i], 815+temp_y[i]/2)
-    canvas1.itemconfigure(listtemp[i],text= temps[i])
-    canvas1.coords(listtemp[i],1910-x_coords[i], 825+temp_y[i]/2)
-    canvas1.itemconfigure(listwind[i],text= winds[i])
-    canvas1.coords(listwind[i],1910-x_coords[i], 838+temp_y[i]/2)
+    if i < maxObsN:
+      canvas1.itemconfigure(listtime[i],text= time)
+      canvas1.coords(listtime[i],1900-x_coords[i], 815+temp_y[i]/2)
+      canvas1.itemconfigure(listtemp[i],text= temps[i])
+      canvas1.coords(listtemp[i],1910-x_coords[i], 825+temp_y[i]/2)
+      canvas1.itemconfigure(listwind[i],text= winds[i])
+      canvas1.coords(listwind[i],1910-x_coords[i], 838+temp_y[i]/2)
 
 
 def timer1():
@@ -199,7 +203,7 @@ def timer1():
     canvas1.itemconfigure(day6summary,text=summary+" "+precip+" rain. Min "+mintemp+"°C")
     updategraph()
    
-    mainwin.after(60000,timer1)
+    mainwin.after(15*60000,timer1)
 
 drawgraph()
 timer1()
