@@ -35,6 +35,10 @@ canvas1.place(x=0,y=0)
 iconlist = ["sun.png","Showers.png","PartlyCloudy.png","Cloudy.png","Rain.png"]
 iconlistsmall = ["sunsmall.png","Showerssmall.png","PartlyCloudysmall.png","Cloudysmall.png","Rainsmall.png"]
 
+StationNameList = ["Melbourne", "Scoresby"]
+StationIndex = 1
+
+
 #spritecloud3 = GameObject("Showers.png",x=500,y=30)
 dy = 30
 spriteForcast0 = GameObject(iconlist,x=500,y=30+dy)
@@ -59,6 +63,9 @@ day3summary = canvas1.create_text(390,400+dy,font=fontsmall,text="summary3",anch
 day4summary = canvas1.create_text(390,500+dy,font=fontsmall,text="summary4",anchor="w",fill="#7373DD")
 day5summary = canvas1.create_text(390,600+dy,font=fontsmall,text="summary4",anchor="w",fill="#7373DD")
 day6summary = canvas1.create_text(390,700+dy,font=fontsmall,text="summary4",anchor="w",fill="#7373DD")
+
+StationLabel = canvas1.create_text(0,70,font=fontsmall,text=StationNameList[StationIndex],anchor="w",fill="#7373DD")
+
 
 daynames = [0]
 for i in range(1,7):
@@ -163,7 +170,7 @@ def timer1():
      canvas1.itemconfigure(daynames[i],text= daylist[daynumber+i])
     for i in range(1,7):
       canvas1.itemconfigure(maxtemps[i],text= forecasts[i][1]+"°C")
-    weatherobserve = weather.fetch_melbourne_observation()
+    weatherobserve = weather.fetch_melbourne_observation_name(StationNameList[StationIndex])
     if weatherobserve == None:
        mainwin.after(60000,timer1)
        return
@@ -171,7 +178,6 @@ def timer1():
     canvas1.itemconfigure(mytemptext,text= temp+"°")
     canvas1.itemconfigure(myraintext,text=f"Feels like: {apparent}°C | 🌬️ Wind: {wind} km/h | 💧 Humidity: {humidity}% | 💧 rain: {rain}mm")
    
-    
     (precip, maxtemp, mintemp,summary) = forecasts[0]
     chooseicon(spriteForcast0, summary.lower())
     if precip != "0mm":
@@ -208,5 +214,20 @@ def timer1():
 drawgraph()
 timer1()
 
+def onSpaceKey(event):
+   global StationIndex
+   StationIndex = StationIndex + 1
+   if StationIndex >= len(StationNameList):
+      StationIndex = 0
+   weatherobserve = weather.fetch_melbourne_observation_name(StationNameList[StationIndex])
+   if weatherobserve == None:
+       mainwin.after(60000,timer1)
+       return
+   (temp, apparent,wind, humidity, rain,time) = weatherobserve
+   canvas1.itemconfigure(mytemptext,text= temp+"°")
+   canvas1.itemconfigure(myraintext,text=f"Feels like: {apparent}°C | 🌬️ Wind: {wind} km/h | 💧 Humidity: {humidity}% | 💧 rain: {rain}mm")
+   canvas1.itemconfig(StationLabel, text = StationNameList[StationIndex])
+
+mainwin.bind("<space>", onSpaceKey)
 
 mainwin.mainloop() 

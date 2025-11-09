@@ -49,12 +49,8 @@ def fetch_melbourne_observation():
     except Exception as e:
         print("Error: ",e,". Will try again in 1 min.")
         return None
-
     parser = BOMParser()
     parser.feed(html)
-
-    #print(parser.melbourne_rows)
-
     if parser.melbourne_rows:
         latest = parser.melbourne_rows[1]  # Get the newest row
         temp = latest[1]
@@ -69,6 +65,38 @@ def fetch_melbourne_observation():
     else:
         print("⚠️ No Melbourne data found.")
     return (temp,apparent, wind, humidity, rain,time)
+
+def fetch_melbourne_observation_name(stationname):
+    url = "http://www.bom.gov.au/products/IDV60801/IDV60801.95867.shtml"
+    if stationname == "Scoresby":
+       url = "http://www.bom.gov.au/products/IDV60801/IDV60801.95867.shtml"
+    if stationname == "Melbourne":
+       url = "https://www.bom.gov.au/products/IDV60901/IDV60901.95936.shtml" 
+    headers = {'User-Agent': 'Mozilla/5.0'}
+    req = urllib.request.Request(url, headers=headers)
+    try:
+        with urllib.request.urlopen(req) as response:
+           html = response.read().decode()
+    except Exception as e:
+        print("Error: ",e,". Will try again in 1 min.")
+        return None
+    parser = BOMParser()
+    parser.feed(html)
+    if parser.melbourne_rows:
+        latest = parser.melbourne_rows[1]  # Get the newest row
+        temp = latest[1]
+        apparent = latest[2]
+        wind = latest[7]
+        humidity = latest[4]
+        time = latest[0]
+        rain = latest[13]
+        print(f"🌡️ Temp: {temp}°C | Feels Like: {apparent}°C")
+        print(f"🌬️ Wind: {wind} km/h | 💧 Humidity: {humidity}% | rain: {rain}mm")
+        print(f"🕒 Observed at: {time}")
+    else:
+        print("⚠️ No Melbourne data found.")
+    return (temp,apparent, wind, humidity, rain,time)
+
 
 
 def fetchALL_melbourne_observation():
