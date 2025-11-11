@@ -52,6 +52,7 @@ spriteForcast6 = GameObject(iconlistsmall,x=350,y=695+dy)
 fontbig = ("Arial",70)
 fontmedium = ("Arial",45)
 fontsmall = ("Arial",26)
+fontsmall2 = ("Arial",22)
 fonttiny = ("Courier",11)
 fonttiny2 = ("Arial",18)
 mytemptext = canvas1.create_text(300,40+dy,font=fontbig,text="temp",fill="yellow")
@@ -64,8 +65,8 @@ day4summary = canvas1.create_text(390,500+dy,font=fontsmall,text="summary4",anch
 day5summary = canvas1.create_text(390,600+dy,font=fontsmall,text="summary4",anchor="w",fill="#7373DD")
 day6summary = canvas1.create_text(390,700+dy,font=fontsmall,text="summary4",anchor="w",fill="#7373DD")
 
-StationLabel = canvas1.create_text(0,70,font=fontsmall,text=StationNameList[StationIndex],anchor="w",fill="#7373DD")
-
+StationLabel = canvas1.create_text(10,70,font=fontsmall2,text=StationNameList[StationIndex],anchor="w",fill="#7373DD")
+StationtimeLabel = canvas1.create_text(30,100,font=fonttiny,text="Updated",anchor="w",fill="#7373DD")
 
 daynames = [0]
 for i in range(1,7):
@@ -177,7 +178,8 @@ def timer1():
     (temp, apparent,wind, humidity, rain,time) = weatherobserve
     canvas1.itemconfigure(mytemptext,text= temp+"°")
     canvas1.itemconfigure(myraintext,text=f"Feels like: {apparent}°C | 🌬️ Wind: {wind} km/h | 💧 Humidity: {humidity}% | 💧 rain: {rain}mm")
-   
+    canvas1.itemconfigure(StationtimeLabel,text = time)
+
     (precip, maxtemp, mintemp,summary) = forecasts[0]
     chooseicon(spriteForcast0, summary.lower())
     if precip != "0mm":
@@ -227,6 +229,7 @@ def onSpaceKey(event):
    canvas1.itemconfigure(mytemptext,text= temp+"°")
    canvas1.itemconfigure(myraintext,text=f"Feels like: {apparent}°C | 🌬️ Wind: {wind} km/h | 💧 Humidity: {humidity}% | 💧 rain: {rain}mm")
    canvas1.itemconfig(StationLabel, text = StationNameList[StationIndex])
+   canvas1.itemconfigure(StationtimeLabel,text = time)
 
 mainwin.bind("<space>", onSpaceKey)
 
