@@ -17,7 +17,7 @@ class GameObject:
         self.imagelist = []
         for myfile in filelist:
             self.imagelist.append(PhotoImage(file=myfile))
-        self.sprite = canvas1.create_image(2,2,image=self.imagelist[0])
+        self.sprite = canvas1.create_image(1,1,image=self.imagelist[0])
         canvas1.move(self.sprite,x,y)
     def move(self,dx=0,dy=0):
         self.x = self.x + dx
@@ -33,6 +33,8 @@ canvas1 = Canvas(mainwin,width=1920,height= 1080,bg="black")
 canvas1.place(x=0,y=0)
 
 iconlist = ["sun.png","Showers.png","PartlyCloudy.png","Cloudy.png","Rain.png"]
+xmaslist = ["Themes/Tree.png", "Themes/House1.png","Themes/Santa1.png"]
+
 iconlistsmall = ["sunsmall.png","Showerssmall.png","PartlyCloudysmall.png","Cloudysmall.png","Rainsmall.png"]
 
 StationNameList = ["Melbourne", "Scoresby"]
@@ -48,6 +50,8 @@ spriteForcast3 = GameObject(iconlistsmall,x=350,y=395+dy)
 spriteForcast4 = GameObject(iconlistsmall,x=350,y=495+dy)
 spriteForcast5 = GameObject(iconlistsmall,x=350,y=595+dy)
 spriteForcast6 = GameObject(iconlistsmall,x=350,y=695+dy)
+
+spriteTheme = GameObject(xmaslist,x=1350,y=500)
 
 fontbig = ("Arial",70)
 fontmedium = ("Arial",45)
