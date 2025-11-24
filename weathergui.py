@@ -1,9 +1,12 @@
 from tkinter import *
 import weather
+from weatherLEDanimations import *
 from time import *
 import os
 
 import sys
+
+SHOWWEATHER  = True  #  False for fast debugging
 
 # for loading files (.png, .txt), set current directory = location of this python script (needed for Linux)
 current_script_directory = os.path.dirname(os.path.abspath(__file__))
@@ -33,7 +36,10 @@ canvas1 = Canvas(mainwin,width=1920,height= 1080,bg="black")
 canvas1.place(x=0,y=0)
 
 iconlist = ["sun.png","Showers.png","PartlyCloudy.png","Cloudy.png","Rain.png"]
+
 xmaslist = ["Themes/Tree.png", "Themes/House1.png","Themes/Santa1.png"]
+xmaslocX = 1200
+xmaslocY = 300
 
 iconlistsmall = ["sunsmall.png","Showerssmall.png","PartlyCloudysmall.png","Cloudysmall.png","Rainsmall.png"]
 
@@ -51,7 +57,7 @@ spriteForcast4 = GameObject(iconlistsmall,x=350,y=495+dy)
 spriteForcast5 = GameObject(iconlistsmall,x=350,y=595+dy)
 spriteForcast6 = GameObject(iconlistsmall,x=350,y=695+dy)
 
-spriteTheme = GameObject(xmaslist,x=1350,y=500)
+spriteTheme = GameObject(xmaslist,x=xmaslocX+200,y=xmaslocY+200)
 
 fontbig = ("Arial",70)
 fontmedium = ("Arial",45)
@@ -217,8 +223,9 @@ def timer1():
    
     mainwin.after(15*60000,timer1)
 
-drawgraph()
-timer1()
+if SHOWWEATHER  == True: 
+   drawgraph()
+   timer1()
 
 def onSpaceKey(event):
    global StationIndex
@@ -237,4 +244,23 @@ def onSpaceKey(event):
 
 mainwin.bind("<space>", onSpaceKey)
 
+angle = 1
+def animationtimer():
+    global angle, charStars, mystars
+    angle = angle + 1
+    if angle == 360: angle = 0 
+    #myship.rotate(angle)
+    mystars.undraw()
+    del mystars
+    charStars = cycle_star_colours(charStars)
+    mystars = LEDobj(canvas1,1100,100,dx = 0,dy = 0,CharPoints=charStars, pixelsize = 2)
+    mainwin.after(100,animationtimer)
+
+#myship = LEDobj(canvas1,1000,400,dx = 0,dy = 0,CharPoints=charRallyX, pixelsize = 2)
+mystars = LEDobj(canvas1,1000,0,dx = 0,dy = 0,CharPoints=charStars, pixelsize = 2)
+
+
+
+
+animationtimer()
 mainwin.mainloop() 

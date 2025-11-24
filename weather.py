@@ -195,10 +195,10 @@ def ascii_weather_display(forecasts):
         print(icon +" " + textbrightyellow+ tempmax+"° ("+tempmin+"°) "+textblue2+summary)
         print(textlightblue+"  "+precip)
 
-forecasts = fetch_bom_forecast()
-if forecasts:
-        ascii_weather_display(forecasts)
-else:
-        print("No forecast data found for Melbourne.")
+#forecasts = fetch_bom_forecast()
+#if forecasts:
+#        ascii_weather_display(forecasts)
+#else:
+#        print("No forecast data found for Melbourne.")
 
 
