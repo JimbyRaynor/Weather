@@ -244,19 +244,21 @@ def onSpaceKey(event):
 
 mainwin.bind("<space>", onSpaceKey)
 
-angle = 1
+angle = 0
+dangle = 1
 def animationtimer():
-    global angle, charStars, mystars
-    angle = angle + 1
-    if angle == 360: angle = 0 
-    #myship.rotate(angle)
+    global angle, charStars, mystars, dangle
+    angle = angle + dangle
+    if angle == 6: dangle = -1
+    if angle == -6: dangle = 1
+    myship.rotate(angle)
     mystars.undraw()
     del mystars
     charStars = cycle_star_colours(charStars)
-    mystars = LEDobj(canvas1,1100,100,dx = 0,dy = 0,CharPoints=charStars, pixelsize = 2)
-    mainwin.after(100,animationtimer)
+    mystars = LEDobj(canvas1,1100,0,dx = 0,dy = 0,CharPoints=charStars, pixelsize = 4)
+    mainwin.after(200,animationtimer)
 
-#myship = LEDobj(canvas1,1000,400,dx = 0,dy = 0,CharPoints=charRallyX, pixelsize = 2)
+myship = LEDobj(canvas1,xmaslocX+170,xmaslocY+400,dx = 0,dy = 0,CharPoints=charRaymond, pixelsize = 2)
 mystars = LEDobj(canvas1,1000,0,dx = 0,dy = 0,CharPoints=charStars, pixelsize = 2)
 
 
