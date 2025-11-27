@@ -31,7 +31,7 @@ class GameObject:
 
 
 mainwin = Tk()
-mainwin.geometry("1600x900+1+1") # window is at x=1, y=1 on screen (top left)
+mainwin.geometry("1277x1050+0+0") # window is at x=1, y=1 on screen (top left)
 canvas1 = Canvas(mainwin,width=1920,height= 1080,bg="black")
 canvas1.place(x=0,y=0)
 
@@ -242,7 +242,7 @@ def onSpaceKey(event):
    canvas1.itemconfig(StationLabel, text = StationNameList[StationIndex])
    canvas1.itemconfigure(StationtimeLabel,text = time)
 
-mainwin.bind("<space>", onSpaceKey)
+
 
 angle = 0
 dangle = 1
@@ -259,10 +259,20 @@ def animationtimer():
     mainwin.after(200,animationtimer)
 
 myship = LEDobj(canvas1,xmaslocX+170,xmaslocY+400,dx = 0,dy = 0,CharPoints=charRaymond, pixelsize = 2)
-mystars = LEDobj(canvas1,1000,0,dx = 0,dy = 0,CharPoints=charStars, pixelsize = 2)
+mystars = LEDobj(canvas1,1000,0,dx = 0,dy = 0,CharPoints=charStars, pixelsize = 4)
 
-
+def on_click(event):
+   print(f"x={event.x} and y={event.y}")
+   coords = f"{event.x},{event.y}\n"
+   charStars.append((event.x/4-276,event.y/4-1,'red'))
+   #print(charStars)
+   #with open("lights.txt","a") as f:
+   #          f.write(coords)
 
 
 animationtimer()
+
+
+mainwin.bind("<space>", onSpaceKey)
+mainwin.bind("<Button-1>", on_click)
 mainwin.mainloop() 
