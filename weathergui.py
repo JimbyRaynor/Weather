@@ -246,8 +246,27 @@ def onSpaceKey(event):
 
 angle = 0
 dangle = 1
+presentlist = []
+stackx = xmaslocX+80
+stacky = xmaslocY+320
+
+def stackpresent(thispresent):
+   global stackx, stacky
+   thispresent.resetposition(stackx,stacky)
+   stackx = stackx + 40
+   if stackx >= xmaslocX+80+240:
+      stackx = xmaslocX+80
+      stacky = stacky - 30
+   presentlist.append(thispresent)
+   if stacky < xmaslocY+80:
+      for box in presentlist:
+         box.undraw()
+      presentlist.clear()
+      stackx = xmaslocX+80
+      stacky = xmaslocY+320
+
 def animationtimer():
-    global angle, charStars, mystars, dangle
+    global angle, charStars, mystars, dangle, mypresent
     angle = angle + dangle
     if angle == 6: dangle = -1
     if angle == -6: dangle = 1
@@ -256,10 +275,17 @@ def animationtimer():
     del mystars
     charStars = cycle_star_colours(charStars)
     mystars = LEDobj(canvas1,1100,0,dx = 0,dy = 0,CharPoints=charStars, pixelsize = 4)
+    mypresent.move()
+    if mypresent.y <= 730:
+       stackpresent(mypresent)
+       mypresent = LEDobj(canvas1,xmaslocX+170,xmaslocY+600,dx = 0,dy = -1,CharPoints=charPresent1, pixelsize = 2)
     mainwin.after(200,animationtimer)
 
 myship = LEDobj(canvas1,xmaslocX+170,xmaslocY+400,dx = 0,dy = 0,CharPoints=charRaymond, pixelsize = 2)
 mystars = LEDobj(canvas1,1000,0,dx = 0,dy = 0,CharPoints=charStars, pixelsize = 4)
+
+mypresent = LEDobj(canvas1,xmaslocX+170,xmaslocY+600,dx = 0,dy = -1,CharPoints=charPresent1, pixelsize = 2)
+mypresentseat = LEDobj(canvas1,xmaslocX+170,730,dx = 0,dy = 0,CharPoints=charPresent1, pixelsize = 2)
 
 def on_click(event):
    print(f"x={event.x} and y={event.y}")
