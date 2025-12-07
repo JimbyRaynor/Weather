@@ -258,7 +258,7 @@ def stackpresent(thispresent):
       stackx = xmaslocX+80
       stacky = stacky - 30
    presentlist.append(thispresent)
-   if stacky < xmaslocY+80:
+   if stacky < xmaslocY+280:
       for box in presentlist:
          box.undraw()
       presentlist.clear()
