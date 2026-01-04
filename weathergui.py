@@ -57,7 +57,7 @@ spriteForcast4 = GameObject(iconlistsmall,x=350,y=495+dy)
 spriteForcast5 = GameObject(iconlistsmall,x=350,y=595+dy)
 spriteForcast6 = GameObject(iconlistsmall,x=350,y=695+dy)
 
-spriteTheme = GameObject(xmaslist,x=xmaslocX+200,y=xmaslocY+200)
+#spriteTheme = GameObject(xmaslist,x=xmaslocX+200,y=xmaslocY+200)
 
 fontbig = ("Arial",70)
 fontmedium = ("Arial",45)
@@ -98,13 +98,22 @@ def chooseicon(myspriteobject, textinfo):
 def normalize(values, height, padding):
     min_val = min(values)
     max_val = max(values)
-    scale = (height - 2 * padding) / (max_val - min_val)
+    if max_val - min_val > 0:
+      scale = (height - 2 * padding) / (max_val - min_val)
+    else:
+      scale = height
     return [(height - padding - (v - min_val) * scale) for v in values]
 
 listtemp = []
 listtime = []
 listwind = []
 maxObsN = 60 # max number of observations  ... updated in drawgraph
+
+def safe_float(value):
+  try:
+     return int(value)
+  except (ValueError, TypeError):
+     return 0
 
 def drawgraph():
   global maxObsN
@@ -124,7 +133,7 @@ def drawgraph():
    i = i + 1
   maxObsN = len(rows) 
   times = [row[0] for row in rows]
-  temps = [float(row[1]) for row in rows]
+  temps = [safe_float(row[1]) for row in rows]
   winds = [row[2] for row in rows]
   temp_y = normalize(temps, canvas_height, padding)
   x_spacing = (canvas_width - 2 * padding) / (len(rows) - 1)
@@ -154,7 +163,7 @@ def updategraph():
    i = i + 1
   print("Number of temperature observations = ",len(rows)) 
   times = [row[0] for row in rows]
-  temps = [float(row[1]) for row in rows]
+  temps = [safe_float(row[1]) for row in rows]
   winds = [row[2] for row in rows]
   temp_y = normalize(temps, canvas_height, padding)
   x_spacing = (canvas_width - 2 * padding) / (len(rows) - 1)
@@ -275,17 +284,17 @@ def animationtimer():
     del mystars
     charStars = cycle_star_colours(charStars)
     mystars = LEDobj(canvas1,1100,0,dx = 0,dy = 0,CharPoints=charStars, pixelsize = 4)
-    mypresent.move()
-    if mypresent.y <= 730:
-       stackpresent(mypresent)
-       mypresent = LEDobj(canvas1,xmaslocX+170,xmaslocY+600,dx = 0,dy = -1,CharPoints=charPresent1, pixelsize = 2)
+    #mypresent.move()
+    #if mypresent.y <= 730:
+       #stackpresent(mypresent)
+       #mypresent = LEDobj(canvas1,xmaslocX+170,xmaslocY+600,dx = 0,dy = -1,CharPoints=charPresent1, pixelsize = 2)
     mainwin.after(200,animationtimer)
 
 myship = LEDobj(canvas1,xmaslocX+170,xmaslocY+400,dx = 0,dy = 0,CharPoints=charRaymond, pixelsize = 2)
 mystars = LEDobj(canvas1,1000,0,dx = 0,dy = 0,CharPoints=charStars, pixelsize = 4)
 
-mypresent = LEDobj(canvas1,xmaslocX+170,xmaslocY+600,dx = 0,dy = -1,CharPoints=charPresent1, pixelsize = 2)
-mypresentseat = LEDobj(canvas1,xmaslocX+170,730,dx = 0,dy = 0,CharPoints=charPresent1, pixelsize = 2)
+#mypresent = LEDobj(canvas1,xmaslocX+170,xmaslocY+600,dx = 0,dy = -1,CharPoints=charPresent1, pixelsize = 2)
+#mypresentseat = LEDobj(canvas1,xmaslocX+170,730,dx = 0,dy = 0,CharPoints=charPresent1, pixelsize = 2)
 
 def on_click(event):
    print(f"x={event.x} and y={event.y}")
