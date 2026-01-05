@@ -111,7 +111,7 @@ maxObsN = 60 # max number of observations  ... updated in drawgraph
 
 def safe_float(value):
   try:
-     return int(value)
+     return float(value)
   except (ValueError, TypeError):
      return 0
 
